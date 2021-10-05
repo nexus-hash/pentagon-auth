@@ -2,6 +2,16 @@ const client = require("../../database/db");
 const mailMessage = require("../../mailer/mailFormat");
 const sendEmail = require("../../mailer/sendEmail");
 
+/* 
+  @route POST /auth/sendCode
+  @desc Send verification code to user
+
+  @body {
+    email: string
+    type: string (optional)
+  }
+*/
+
 async function sendCode(req, res, next) {
   try {
     await client.connect();
@@ -12,14 +22,15 @@ async function sendCode(req, res, next) {
       .collection("verification")
       .find({ email: email })
       .count();
+      if(type=="signup"){
     var checkUser = await client
       .db("data")
       .collection("users")
       .find({ email: email })
-      .count();
-    var code = Math.floor(Math.random() * (999999 - 100000) + 1000);
+      .count();}
+    var code = Math.floor(Math.random() * (999999 - 100000+1) + 100000);
     var message = "";
-    var mailmessage = mailMessage(code);
+    var mailmessage = mailMessage(code,req.body.need);
     var subject = "6 Digit Verification Code";
     if (type == "signup" && checkUser != 0) {
       message = "User with the email already exists";
@@ -49,6 +60,7 @@ async function sendCode(req, res, next) {
   } finally {
     await client.close();
   }
+  console.log(message);
   res.send({ message: message });
 }
 
