@@ -30,7 +30,7 @@ async function login(req, res,next) {
     }
     else if(result[0].password === sha256(password)){
       message = "Login Successful";
-      const token = jwt.sign({email: email}, process.env.JWT_SECRET,{expiresIn: 60*1});
+      const token = jwt.sign({email: email}, process.env.JWT_SECRET,{expiresIn: 60*60*24*3});
       logintoken = token;
       console.log(logintoken);
     }else{
