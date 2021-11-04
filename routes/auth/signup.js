@@ -1,4 +1,5 @@
 const client = require("../../database/db");
+const sha256 = require("sha256");
 const sendEmail = require("../../mailer/sendEmail");
 const checkCode = require("./checkCode");
 const genID = require("./genid");
@@ -50,7 +51,7 @@ async function signup(req, res, next) {
           _id: userID,
           username: req.body.username,
           email: req.body.email,
-          password: req.body.password,
+          password: sha256(req.body.password),
           name: req.body.name,
         })
         .catch((err) => {

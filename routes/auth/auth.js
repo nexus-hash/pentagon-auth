@@ -4,6 +4,7 @@ var router = express.Router();
 var login = require("./login");
 const sendCode = require("./sendCode");
 var signup = require("./signup");
+const verifytoken = require("./verifytoken");
 
 /* 
   @route POST /api/auth/
@@ -26,4 +27,8 @@ router.post("/forgotpassword",function(req,res,next){
 router.post("/sendCode", function (req, res, next) {
   sendCode(req, res, next);
 });
+
+router.post("/verifytoken",function(req,res,next){
+  verifytoken(req,res,next);
+})
 module.exports = router;
