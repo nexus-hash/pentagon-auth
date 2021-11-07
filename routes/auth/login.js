@@ -18,6 +18,7 @@ async function login(req, res,next) {
   try {
     var message = "";
     var logintoken = "";
+    var uname = "";
     await client.connect();
     const { email, password } = req.body;
     var result = await client.db('data')
@@ -32,7 +33,7 @@ async function login(req, res,next) {
       message = "Login Successful";
       const token = jwt.sign({email: email}, process.env.JWT_SECRET,{expiresIn: 60*60*24*3});
       logintoken = token;
-      console.log(logintoken);
+      uname = result[0].username;
     }else{
       message = "Bad Auth. Invalid Credentials";
     }
@@ -41,7 +42,7 @@ async function login(req, res,next) {
     message = "Login Error"
   } finally{
     await client.close();
-    res.send({message: message,token: logintoken});
+    res.send({message: message,token: logintoken,uname: uname});
   }
 }
 
