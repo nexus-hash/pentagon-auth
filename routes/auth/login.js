@@ -19,6 +19,7 @@ async function login(req, res,next) {
     var message = "";
     var logintoken = "";
     var uname = "";
+    var uid = "";
     await client.connect();
     const { email, password } = req.body;
     var result = await client.db('data')
@@ -31,8 +32,10 @@ async function login(req, res,next) {
     }
     else if(result[0].password === sha256(password)){
       message = "Login Successful";
-      const token = jwt.sign({email: email}, process.env.JWT_SECRET,{expiresIn: 60*60*24*3});
+      console.log(result[0]);
+      const token = jwt.sign({email: email,password:result[0].password}, process.env.JWT_SECRET,{expiresIn: 60*60*24*3});
       logintoken = token;
+      uid = result[0]._id
       uname = result[0].username;
     }else{
       message = "Bad Auth. Invalid Credentials";
@@ -42,7 +45,7 @@ async function login(req, res,next) {
     message = "Login Error"
   } finally{
     await client.close();
-    res.send({message: message,token: logintoken,uname: uname});
+    res.send({message: message,token: logintoken,uname: uname,uid:uid});
   }
 }
 

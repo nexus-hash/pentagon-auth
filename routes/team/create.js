@@ -2,6 +2,7 @@ const client = require("../../database/db");
 const jwt = require("jsonwebtoken");
 const genPID = require("./genpid");
 const genFID = require("./genFID");
+const getjoinId = require("./genjoinid");
 
 async function createTeam(req, res, next) {
   var acknowledge = "";
@@ -15,35 +16,32 @@ async function createTeam(req, res, next) {
     }else{
     var project_id = await genPID(client);
     var default_folder_id = await genFID(client);
+    var joinId = getjoinId();
     await client.db('data').collection('projects').insertOne({
       _id: project_id,
       pname: project_name,
       pdesc: project_description,
+      joinId: joinId,
+      projectmembers:[
+        {
+          userid:user_id,
+          isAdmin:true,
+        }
+      ],
+      projecttasks:[],
+      projectmaterials:[
+        {
+          folderid: default_folder_id,
+          foldername:"Materials",
+          contents:[]
+        }
+      ]
     });
-    await client.db('data').collection('projectmembers').insertOne({
-      _id: project_id,
-      members: [{
-        user_id: user_id,
-        isAdmin: true,
-      }],
-    })
-    await client.db('data').collection('projecttasks').insertOne({
-      _id: project_id,
-      tasks: [],
-    })
-    await client.db('data').collection('projectfiles').insertOne({
-      _id: project_id,
-      files: [{
-        file_id: default_folder_id,
-        f_name: "Materials",
-        f_content: [],
-      }],
-    })
-    acknowledge = "Team Created Successfully";
+    acknowledge = "success";
   }
   } catch (error) {
     console.log(error);
-    acknowledge = "Error Creating Team";
+    acknowledge = "failure";
   }finally{
     await client.close();
     res.json({
