@@ -9,9 +9,10 @@ async function createTeam(req, res, next) {
   try {
     await client.connect();
     var user_id = req.body.uid;
+    var user_name = req.body.uname;
     var project_name = req.body.pname;
     var project_description = req.body.pdesc;
-    if(user_id === undefined || project_name === undefined || project_description === undefined) {
+    if(user_id === undefined || project_name === undefined || project_description === undefined || user_name === undefined) {
       acknowledge = "Please provide all the details";
     }else{
     var project_id = await genPID(client);

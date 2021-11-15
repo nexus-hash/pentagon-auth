@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 async function getUserTeam(req, res, next) {
   var message = "";
+  var projects = [];
   try {
     await client.connect();
     var user_id = req.body.uid;
@@ -23,13 +24,14 @@ async function getUserTeam(req, res, next) {
       message = "No team found";
     }
     else{
-      message = "Someteams";
+      projects = result;
     }
   } catch (error) {
     console.log(error);
   }finally{
     res.json({
       message: message,
+      projects: projects
     });
   }
 }
