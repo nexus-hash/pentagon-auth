@@ -7,9 +7,11 @@ async function joinTeam(req, res, next) {
     await client.connect();
     var user_id = req.body.uid;
     var joinId = req.body.joinId;
+    var username = req.body.uname;
     var result = await client.db("data").collection("projects").findOne({joinId:joinId});
     if(result === null) {
       acknowledge = "Team not found";
+      console.log(acknowledge);
     }else {
       var members = result.projectmembers;
       var flag = 0;
@@ -20,9 +22,9 @@ async function joinTeam(req, res, next) {
         }
       }
       if(flag === 1) {
-        acknowledge = "You are already a member of this team";
+        acknowledge = "Already member";
       }else {
-        await client.db("data").collection("projects").updateOne({joinId:joinId},{$push:{projectmembers:{userid:user_id,isAdmin:false}}});
+        await client.db("data").collection("projects").updateOne({joinId:joinId},{$push:{projectmembers:{userid:user_id,username:username,isAdmin:false}}});
         acknowledge = "You have joined the team";
       }
     }

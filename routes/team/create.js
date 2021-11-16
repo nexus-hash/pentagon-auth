@@ -26,6 +26,7 @@ async function createTeam(req, res, next) {
       projectmembers:[
         {
           userid:user_id,
+          username:user_name,
           isAdmin:true,
         }
       ],
