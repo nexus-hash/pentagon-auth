@@ -19,7 +19,6 @@ async function getUserTeam(req, res, next) {
       }
     ])
       .toArray();
-      console.log(result);
     if (result.length === 0) {
       message = "No team found";
     }

@@ -11,7 +11,8 @@ const mongoose = require("mongoose");
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth/auth');
 var teamRouter = require('./routes/team/team');
-var taskRouter = require('./routes/task/task')
+var taskRouter = require('./routes/task/task');
+var materialRouter = require('./routes/materials/materials');
 
 
 var app = express();
@@ -31,6 +32,7 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/team', teamRouter);
 app.use('/task', taskRouter);
+app.use('/material', materialRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
