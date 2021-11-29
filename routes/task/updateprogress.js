@@ -10,9 +10,28 @@ async function UpdateProgress(req,res,next) {
     var teamid = req.body.teamid;
     var taskid = req.body.taskid;
     var getTask = await dbProjectCollection.findOne({_id:teamid,projecttasks:{$elemMatch:{"taskdata.task_id":taskid}}},{projection:{"projecttasks.taskdata":1}});
-    console.log(update);
-
     var result = await dbProjectCollection.updateOne({_id:teamid,projecttasks:{$elemMatch:{"taskdata.task_id":taskid}}},{$set:{"projecttasks.$":update}});
+    if(result.modifiedCount>0){
+      message = "success";
+      updatedData = getTask.projecttasks[0];
+      var result2 = await client
+        .db("data")
+        .collection("projects")
+        .findOne({ _id: team_id });
+      var assigneeDetails = await client
+        .db("data")
+        .collection("users")
+        .findOne({ _id: taskdata.assign.userid });
+      var mailBody = mailMessageForNewTask(
+        taskdata.deadline,
+        taskdata.taskTitle,
+        result2.pname,
+        0
+      );
+      var email = assigneeDetails.email;
+      var subject = "New task in project" + result2.pname;
+      sendMail(email, subject, mailBody);
+    }
   } catch (error) {
     message = "Error updating progress";
   } finally{

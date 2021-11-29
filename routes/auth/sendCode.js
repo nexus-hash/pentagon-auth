@@ -1,5 +1,5 @@
 const client = require("../../database/db");
-const mailMessage = require("../../mailer/mailFormat");
+const {mailMessage} = require("../../mailer/mailFormat");
 const sendEmail = require("../../mailer/sendEmail");
 
 /* 

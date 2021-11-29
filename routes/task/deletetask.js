@@ -5,9 +5,12 @@ async function DeleteTask(req,res,next) {
   var message = "";
   try {
     await client.connect();
-    var taskid = req.body.taskid;
+    var task_id = req.body.taskid;
     var teamid = req.body.teamid;
-    var result = await client.db("data").collection("projects").updateOne({_id:teamid},{$pull:{"projecttasks.taskdata":{task_id}}});
+    var result = await client.db("data").collection("projects").updateOne({_id:teamid},{$pull:{projecttasks:{"taskdata.task_id":task_id}}})
+    .catch(err=>{
+      console.log(err);
+    })
     console.log(result);
     if(result.modifiedCount>0){
       message = "sucess";
