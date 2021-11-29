@@ -1,5 +1,5 @@
 const client = require("../../database/db");
-const genFID = require("../team/genFID");
+const genFID = require("../team/genfid");
 
 async function AddNewFolder(req,res,next){
   var message = "";
