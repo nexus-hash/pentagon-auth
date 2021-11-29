@@ -1,7 +1,7 @@
 const client = require("../../database/db");
 const jwt = require("jsonwebtoken");
 const genPID = require("./genpid");
-const genFID = require("./genFID");
+const genFID = require("./genfid");
 const getjoinId = require("./genjoinid");
 
 async function createTeam(req, res, next) {
